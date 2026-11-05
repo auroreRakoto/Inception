@@ -1,0 +1,23 @@
+# Env variables
+.env
+**/.env
+
+# Secrets
+secrets/
+**/secrets/
+
+# Docker info
+data/
+**/data/
+volumes/
+
+# Logs
+*.log
+
+# Temp
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
