@@ -3,6 +3,11 @@
 # start-up
 set -e
 
+: "${}"
+: "${}"
+: "${}"
+
+
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
 
