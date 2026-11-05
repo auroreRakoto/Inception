@@ -3,13 +3,17 @@
 # start-up
 set -e
 
-: "${}"
-: "${}"
-: "${}"
-
+: "${MYSQL_DATABASE:?MYSQL_DATABASE is required}"
+: "${MYSQL_USER:?MYSQL_USER is required}"
+: "${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}"
+: "${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}"
 
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
+
+if [ -f /var/lib/mysql/.initialized ]; then
+    exec mariadbd --user=mysql
+fi
 
 # init
 mariadbd --user=mysql --skip-networking &
@@ -30,9 +34,12 @@ EOF
 
 mariadb-admin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
 
-exec mariadbd --user=mysql
+wait "$pid" || true
 
-# user creation
+# Mark database as initialized
+touch /var/lib/mysql/.initialized
+chown mysql:mysql /var/lib/mysql/.initialized
 
 # mariadb launch
+exec mariadbd --user=mysql
 
